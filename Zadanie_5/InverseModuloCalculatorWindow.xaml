@@ -1,12 +1,51 @@
 ﻿<Window x:Class="Zadanie_5.InverseModuloCalculatorWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Zadanie_5"
-        mc:Ignorable="d"
-        Title="InverseModuloCalculatorWindow" Height="450" Width="800">
-    <Grid>
-        
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:Zadanie_5"
+  mc:Ignorable="d"
+  Title="Obliczanie odwrotności modulo n"
+  Width="500"
+  Height="700">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <Label Content="Liczba a (zapis dziesiętny)"/>
+            <Button HorizontalAlignment="Right"
+        Content="Pomoc"
+        Margin="0,0,0,5"
+        Click="HelpButtonClick"/>
+        </DockPanel>
+        <TextBox Grid.Row="1"
+      Name="NumberTextBox"
+      TextWrapping="Wrap"
+      ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <Label Grid.Row="2"
+      Content="Moduł m (zapis dziesiętny)"/>
+        <TextBox Grid.Row="3"
+      Name="ModulusTextBox"
+      TextWrapping="Wrap"
+      ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <Button Grid.Row="4"
+      Content="Oblicz"
+      Margin="0,5,0,5"
+      Click="CalculateButtonClick"/>
+
+        <Label Grid.Row="5"
+      Content="Odwrotność liczby a modulo m (zapis dziesiętny)"/>
+        <TextBox Grid.Row="6"
+      Name="InverseTextBox"
+      TextWrapping="Wrap"
+      IsReadOnly="True"
+      ScrollViewer.VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </Window>
