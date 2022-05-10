@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Zadanie_5
 {
-    class RSA
+    public class RSA
     {
         public const int PUBLIC_EXPONENT = 65537; // często używana jako e liczba pierwsza Fermata 2^(2^4) + 1
 
