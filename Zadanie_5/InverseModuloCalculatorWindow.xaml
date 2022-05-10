@@ -8,44 +8,44 @@
   Title="Obliczanie odwrotności modulo n"
   Width="500"
   Height="700">
-    <Grid Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0">
-            <Label Content="Liczba a (zapis dziesiętny)"/>
-            <Button HorizontalAlignment="Right"
+  <Grid Margin="5">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <DockPanel Grid.Row="0">
+      <Label Content="Liczba a (zapis dziesiętny)"/>
+      <Button HorizontalAlignment="Right"
         Content="Pomoc"
         Margin="0,0,0,5"
         Click="HelpButtonClick"/>
-        </DockPanel>
-        <TextBox Grid.Row="1"
+    </DockPanel>
+    <TextBox Grid.Row="1"
       Name="NumberTextBox"
       TextWrapping="Wrap"
       ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-        <Label Grid.Row="2"
+    <Label Grid.Row="2"
       Content="Moduł m (zapis dziesiętny)"/>
-        <TextBox Grid.Row="3"
+    <TextBox Grid.Row="3"
       Name="ModulusTextBox"
       TextWrapping="Wrap"
       ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-        <Button Grid.Row="4"
+    <Button Grid.Row="4"
       Content="Oblicz"
       Margin="0,5,0,5"
       Click="CalculateButtonClick"/>
 
-        <Label Grid.Row="5"
+    <Label Grid.Row="5"
       Content="Odwrotność liczby a modulo m (zapis dziesiętny)"/>
-        <TextBox Grid.Row="6"
+    <TextBox Grid.Row="6"
       Name="InverseTextBox"
       TextWrapping="Wrap"
       IsReadOnly="True"
       ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-    </Grid>
+  </Grid>
 </Window>
