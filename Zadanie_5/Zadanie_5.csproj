@@ -55,6 +55,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EnDecryptorWindow.xaml.cs">
+      <DependentUpon>EnDecryptorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="InverseModuloCalculatorWindow.xaml.cs">
+      <DependentUpon>InverseModuloCalculatorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="KeyPairGeneratorWindow.xaml.cs">
+      <DependentUpon>KeyPairGeneratorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RSA.cs" />
+    <Page Include="EnDecryptorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InverseModuloCalculatorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="KeyPairGeneratorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
