@@ -1,14 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Zadanie_5
 {
     class RSA
     {
+        public const int PUBLIC_EXPONENT = 65537; // często używana jako e liczba pierwsza Fermata 2^(2^4) + 1
+
+        public class KeyPair
+        {
+            public BigInteger Modulus { get; set; }
+            public int PublicExponent { get; set; }
+            public BigInteger PrivateExponent { get; set; }
+            public KeyPair(BigInteger modulus, int publicExponent, BigInteger privateExponent)
+            {
+                Modulus = modulus;
+                PublicExponent = publicExponent;
+                PrivateExponent = privateExponent;
+            }
+        }
+
+        public KeyPair GenerateKeyPair(BigInteger p, BigInteger q)
+        {
+            // p, q - duże liczby pierwsze o długości około 1024 bitów, aby ich iloczyn miał długość około 2048 bitów
+            var sb = new StringBuilder();
+            if (!IsProbablePrime(p))
+                sb.Append("p");
+            if (!IsProbablePrime(q))
+            {
+                if (sb.Length > 0)
+                    sb.Append(" i ");
+                sb.Append("q");
+            }
+            if (sb.Length > 0)
+                throw new ArgumentException(sb.ToString() + " nie jest liczbą pierwszą.");
+            var n = p * q; // n = p * q – moduł
+            // φ(n) = (p - 1) * (q - 1) = p * q - (p + q) + 1 = n - (p + q) + 1
+            var fiN = n - (p + q) + 1;
+            // e – liczba względnie pierwsza z φ(n)
+            const int e = PUBLIC_EXPONENT;
+            if (fiN % e == 0) // e jest liczbą pierwszą, więc jeżeli dzieli φ(n), to e i φ(n) nie są względnie pierwsze
+                throw new ArgumentException($"φ(n) = (p-1) * (q-1) nie jest względnie pierwsze z e = {e}.");
+            // d – liczba wyznaczona tak, że zachodzi (e * d) mod φ(n) = 1 -> d = e^(-1) mod φ(n)
+            var d = ModularInverse(e, fiN);
+            return new KeyPair(n, e, d);
+        }
+
         public BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b)
         {
             // standardowy algorytm Euklidesa
@@ -46,5 +85,58 @@ namespace Zadanie_5
                 x += m0;
             return x;
         }
+
+        public BigInteger PowerModulo(BigInteger b, BigInteger e, BigInteger m)
+        {
+            // https://www.geeksforgeeks.org/modular-exponentiation-power-in-modular-arithmetic/; złożoność czasowa log(e)
+            b = b % m; // upewniamy się, że podstawa jest mniejsza od modułu
+            if (b == 0) // jeżeli podstawa jest 0, to wynik też będzie 0 i nie trzeba potęgować
+                return 0;
+            BigInteger res = 1; // inicjujemy wynik jako 1
+            while (e > 0)
+            {
+                // jeżeli aktualny najmłodszy bit wykładnika jest 1, to mnożymy wynik przez aktualną podstawę
+                if ((e & 1) != 0)
+                    res = (res * b) % m;
+                e = e >> 1; // e /= 2; przesuwamy się na na kolejny po aktualnym najmłodszym bicie wykładnika
+                b = (b * b) % m; // zmieniamy podstawę na jej kwadrat modulo m
+            }
+            return res;
+        }
+
+        unsafe public BigInteger GenerateProbablePrime(uint byteLength)
+        {
+            /* test pierwszości Millera-Rabina stwierdza, że liczba jest złożona lub prawdopodobnie (ale nie na pewno) pierwsza; trzeci parametr mpz_probable_prime_p równy np. 100 oznacza, że chcemy, aby prawdopodobieństwo, że liczba złożona jest nazwana pierwszą, wynosiło 2^(-100) */
+            byte* digitsPtr;
+            uint length;
+            generate_probable_prime(byteLength, &digitsPtr, &length); // zwraca tablicę charów zakończoną \0
+            var digits = new char[length]; // length to faktyczna liczba cyfr, a length + 1 to długość bufora z \0
+            for (int i = 0; i < length; ++i) // wskaźnik char* przeskakuje o 2 bajty, bo w C# char ma 2 bajty
+                digits[i] = (char)*(digitsPtr + i);
+            free_array(digitsPtr);
+            BigInteger ret;
+            if (!BigInteger.TryParse(new string(digits), out ret))
+                throw new FormatException("Nie sparsowano wygenerowanej liczby jako BigInteger.");
+            return ret;
+        }
+
+        public bool IsProbablePrime(BigInteger number)
+        {
+            var nStr = number.ToString();
+            var digits = new byte[nStr.Length + 1]; // + 1 na \0
+            for (int i = 0; i < nStr.Length; ++i)
+                digits[i] = (byte)nStr[i];
+            digits[digits.Length - 1] = 0;
+            return is_probable_prime(digits);
+        }
+
+        private const string MpirPrimeDLL = "mpir_prime.dll";
+        private const CallingConvention Convention = CallingConvention.Cdecl;
+        [DllImport(MpirPrimeDLL, CallingConvention = Convention)]
+        unsafe private static extern void generate_probable_prime(uint length_bytes, byte** decimal_digits, uint* decimal_length);
+        [DllImport(MpirPrimeDLL, CallingConvention = Convention)]
+        unsafe private static extern void free_array(byte* array);
+        [DllImport(MpirPrimeDLL, CallingConvention = Convention)]
+        unsafe private static extern bool is_probable_prime(byte[] decimal_digits);
     }
 }
